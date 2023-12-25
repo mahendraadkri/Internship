@@ -76,49 +76,45 @@
             </nav>
         </div>
     </div>
-    <form action="{{url('/')}}/customer" method="post">
-        @csrf
-        <h2>Register</h2>
+    <form action="{{$url}}/customer" method="post">
+    @csrf
+    <h2 class="textcenter text-primary">{{$title}}</h2>
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required value="{{$customer->name}}">
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required value="{{$customer->email}}">
 
-        <label for="gender">Gender:</label>
-        <select id="gender" name="gender" required>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-        </select>
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" rows="4" required></textarea>
-
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required>
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required>
-        <label for="dob">Date of Birth:</label>
-        <input type="date" id="dob" name="dob" required>
-
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-
-        <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required>
-
-     
-
+    <label for="gender">Gender:</label>
+    <select id="gender" name="gender" required value="">
+        <option value="male" {{$customer->gender == "M" ? "checked" : ""}}>Male</option>
+        <option value="female" {{$customer->gender == "F" ? "checked" : ""}}>Female</option>
+        <option value="other" {{$customer->gender == "O" ? "checked" : ""}}>Other</option>
         
+    </select>
+   
 
-        
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required value="{{$customer->address}}">
+    
 
-        
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state" required value="{{$customer->state}}">
 
-        
+    <label for="country">Country:</label>
+    <input type="text" id="country" name="country" required value="{{$customer->country}}">
 
-        <button type="submit">Register</button>
-    </form>
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" name="dob" required value="{{$customer->dob}}">
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required>
+
+    <label for="confirmPassword">Confirm Password:</label>
+    <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+    <button type="submit">Register</button>
+</form>
 </body>
 </html>
