@@ -76,37 +76,39 @@
             </nav>
         </div>
     </div>
-    <form action="{{$url}}/customer" method="post">
+    <form action="{{ route('customer.store') }}" method="post">
     @csrf
     <h2 class="textcenter text-primary">{{$title}}</h2>
 
     <label for="name">Name:</label>
-    <input type="text" id="name" name="name" required value="{{$customer->name}}">
+    <input type="text" id="name" name="name" required value="{{$customer ? $customer->name: ''}}">
+    
+
 
     <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required value="{{$customer->email}}">
+    <input type="email" id="email" name="email" required value="{{$customer ? $customer->email: ''}}">
 
     <label for="gender">Gender:</label>
-    <select id="gender" name="gender" required value="">
-        <option value="male" {{$customer->gender == "M" ? "checked" : ""}}>Male</option>
-        <option value="female" {{$customer->gender == "F" ? "checked" : ""}}>Female</option>
-        <option value="other" {{$customer->gender == "O" ? "checked" : ""}}>Other</option>
-        
+    <select id="gender" name="gender" required>
+        <option value="male" {{ optional($customer)->gender == "M" ? "selected" : "" }}>Male</option>
+        <option value="female" {{ optional($customer)->gender == "F" ? "selected" : "" }}>Female</option>
+        <option value="other" {{ optional($customer)->gender == "O" ? "selected" : "" }}>Other</option>
     </select>
+
    
 
     <label for="address">Address:</label>
-    <input type="text" id="address" name="address" required value="{{$customer->address}}">
+    <input type="text" id="address" name="address" required value="{{$customer ? $customer->address: ''}}">
     
 
     <label for="state">State:</label>
-    <input type="text" id="state" name="state" required value="{{$customer->state}}">
+    <input type="text" id="state" name="state" required value="{{$customer ? $customer->state: ''}}">
 
     <label for="country">Country:</label>
-    <input type="text" id="country" name="country" required value="{{$customer->country}}">
+    <input type="text" id="country" name="country" required value="{{$customer ? $customer->country: ''}}">
 
     <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" name="dob" required value="{{$customer->dob}}">
+    <input type="date" id="dob" name="dob" required value="{{$customer ? $customer->dob: ''}}">
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>

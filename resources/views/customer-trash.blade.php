@@ -8,7 +8,7 @@
     <!-- Bootstrap JS and Popper.js -->
 
 
-    <title>Document</title>
+    <title>Customer Trash</title>
 </head>
 <body>
     <div class="container-fluid bg-dark">
@@ -44,22 +44,10 @@
         </div>
     </div>
     <div class="container">
-        <div class="">
-            <form action="" class="col-9">
-                <div class="form-group">
-                    <input type="search" name="search" id="" class="form-control" placeholder="Search by Name or Email" value="{{$search}}">
-                </div>
-                <button class="btn btn-primary">Search</button>
-                <a href="{{url('/customer')}}"><button class="btn btn-primary" type="button">Reset</button></a>
-                
-            </form>
-            <a href="{{route('customer.create')}}">
-                <button class="btn btn-primary d-inline-block m-2 " style="float: right;">Add</button>
-            </a>
-            <a href="{{url('customer/trash')}}">
-                <button class="btn btn-danger d-inline-block m-2 " style="float: right;">Go To Trash</button>
-            </a>
-        </div>
+        
+        <a href="{{url('customer')}}">
+            <button class="btn btn-primary d-inline-block m-2 float-right">Customer View</button>
+        </a>
        
         
         <table class="table">
@@ -111,24 +99,20 @@
                         {{--from url method-- <a href="{{url('/customer/delete/')}}/{{$customer->customer_id}}">
                             <button class="btn btn-danger">Delete</button>
                         </a> --}}
-                        <a href="{{route('customer.delete',['id' => $customer->customer_id])}}">
-                            <button class="btn btn-danger">Trash</button>
+                        <a href="{{route('customer.force-delete',['id' => $customer->customer_id])}}">
+                            <button class="btn btn-danger">Delete</button>
                         </a>
                         
-                        <a href="{{route('customer.edit',['id' => $customer->customer_id])}}"><button class="btn btn-primary">Edit</button></a>
+                        <a href="{{route('customer.restore',['id' => $customer->customer_id])}}"><button class="btn btn-primary">Restore</button></a>
                         
                     </td>
                 </tr>
-                
                 @endforeach
                
                 
                 
             </tbody>
         </table>
-        <div class="row">
-            {{$customers->links()}}
-        </div>
     </div>
 
 

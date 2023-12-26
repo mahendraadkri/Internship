@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('gender', 10);
             $table->text('address');
             $table->string('state');
-            $table->string('country');
+            $table->string('country',255);
             $table->date('dob');
             $table->string('password');
             $table->timestamps();

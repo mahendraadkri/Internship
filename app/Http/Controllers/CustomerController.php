@@ -24,11 +24,12 @@ class CustomerController extends Controller
      */
     public function create()
     {
-        
+        $customer = Customer::find(1);
         $url = url('/customer');
         $title = "Customer Registration";
         $data = compact('url','title');
-        return view('customer')->with($data);
+        
+        return view('customer', compact('customer', 'url', 'title'));
     }
 
     /**
@@ -39,45 +40,49 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
-        // echo "<pre>";
-        // print_r($request->all());
+        // Validate the form data
+        $validatedData = $request->validate([
+            'user_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:customers|max:255',
+            'gender' => 'required|in:M,F,O',
+            'address' => 'required|string|max:255',
+            'state' => 'required|string|max:255',
+            'country' => 'required|string|max:255',
+            'dob' => 'required|date',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+        $customer = Customer::create($request->all());
 
-              // Validation
-              $request->validate([
-                'name' => 'required',
-                'email' => 'required|email|unique:customers',
-                'gender' => 'required|in:male,female,other|10', 
-                'address' => 'required',
-                'state' => 'required',
-                'country' => 'required',
-                'dob' => 'required|date',
-                'password' => 'required|min:6',
-            ]);
-    
-            // Insert query
-            
-            $customer = new Customer;
-            $customer->name = $request->input('name');
-            $customer->email = $request->input('email');
-            $customer->gender = $request->input('gender');
-            $customer->address = $request->input('address');
-            $customer->state = $request->input('state');
-            $customer->country = $request->input('country');
-            $customer->dob = $request->input('dob');
-            $customer->password = bcrypt($request->input('password'));
-            $customer->save();
-    
-            return redirect('/customer');
+        // Create a new customer
+        $customer = Customer::create($validatedData);
+
+        
+            return redirect('/customer')->with('success', 'Customer registered successfully');;
         
         
     }
 
-    public function view()
+    public function view(Request $request)
     {
-        $customers = Customer::all();
-        $data = compact('customers');
+        $search = $request['search'] ?? "";
+        if ($search != ""){
+            //where
+            $customers = Customer::where('user_name','LIKE', "%$search%")->orWhere('email','LIKE', "%$search%")->get();
+        }else{
+            $customers = Customer::paginate(10);
+        }
+        
+        $data = compact('customers','search');
         return view('customer-view')->with($data);
     }
+
+    public function trash()
+{
+    $customers = Customer::onlyTrashed()->get();
+    $data = compact('customers');
+    return view('customer-trash')->with($data);
+}
+
 
     /**
      * Display the specified resource.
@@ -144,6 +149,28 @@ class CustomerController extends Controller
         if(!is_null($customer))
         {
             $customer->delete();
+        }
+        return redirect('customer');
+       
+    }
+
+    public function forceDelete($id)
+    {
+        $customer = Customer::withTrashed()->find($id);
+        if(!is_null($customer))
+        {
+            $customer->forceDelete();
+        }
+        return redirect()->back();
+       
+    }
+   
+    public function restore($id)
+    {
+        $customer = Customer::withTrashed()->find($id);
+        if(!is_null($customer))
+        {
+            $customer->restore();
         }
         return redirect('customer');
        

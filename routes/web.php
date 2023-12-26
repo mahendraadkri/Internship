@@ -7,6 +7,7 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\SingleController;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,11 +64,35 @@ Route::get('/', function(){
     return view('index');
 });
 
+
+
 Route::get('/register',[RegistrationController::class,'index']);
 Route::post('/register',[RegistrationController::class,'register']);
-Route::get('/customer/delete/{id}',[CustomerController::class, 'delete'])->name('customer.delete');
-Route::get('/customer/edit/{id}',[CustomerController::class, 'edit'])->name('customer.edit');
-Route::post('/customer/update/{id}',[CustomerController::class, 'update'])->name('customer.update');
-Route::get('/customer/create',[CustomerController::class, 'create'])->name('customer.create');
-Route::get('/customer',[CustomerController::class,'view']);
-Route::post('/customer',[CustomerController::class, 'store']);
+
+Route::group(['prefix' => '/customer'], function(){
+    Route::get('/delete/{id}',[CustomerController::class, 'delete'])->name('customer.delete');
+    Route::get('/restore/{id}',[CustomerController::class, 'restore'])->name('customer.restore');
+    Route::get('/force-delete/{id}',[CustomerController::class, 'forceDelete'])->name('customer.force-delete');
+    Route::get('/edit/{id}',[CustomerController::class, 'edit'])->name('customer.edit');
+    Route::post('/update/{id}',[CustomerController::class, 'update'])->name('customer.update');
+    Route::get('/create',[CustomerController::class, 'create'])->name('customer.create');
+    Route::get('',[CustomerController::class,'view']);
+    Route::get('/trash',[CustomerController::class,'trash']);
+    Route::post('/',[CustomerController::class, 'store'])->name('customer.store');
+
+});
+
+Route::get('get-all-session',function(){
+    $session = session()->all();
+    p($session);
+});
+Route::get('set-session', function (Request $request) {
+    $request->session()->put('user_name', 'Ram');
+    // $request->session()->flash('status', 'Success');
+    return redirect('get-all-session');
+});
+
+Route::get('destroy-session',function(){
+    session()->forget('user_name');
+    return redirect('get-all-session');
+});
